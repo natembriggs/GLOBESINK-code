@@ -1,0 +1,55 @@
+cff-version: 1.2.0
+message: >-
+  If you use this code, please cite the GLOBESINK data paper and the dataset
+  (see preferred-citation and references), and this software by its Zenodo DOI.
+  This release (v1.1) is the processing code behind GLOBESINK dataset versions 1.0 and 1.1
+  (concept DOI 10.5281/zenodo.19558503) and the ESSD data paper.
+type: software
+title: "GLOBESINK: MATLAB processing code for the GLOBESINK BGC-Argo particle size and POC flux climatology"
+authors:
+  - family-names: Briggs
+    given-names: Nathan
+    orcid: "https://orcid.org/0000-0003-1549-1386"
+    affiliation: "National Oceanography Centre, Southampton, UK"
+repository-code: "https://github.com/natembriggs/GLOBESINK-code"
+license: MIT
+keywords:
+  - Biogeochemical-Argo
+  - optical backscattering
+  - particulate organic carbon
+  - POC flux
+  - particle size
+  - biological carbon pump
+version: "v1.1"
+date-released: "2026-11-16"
+# the Zenodo software DOI is added after the release mints it (task D2)
+preferred-citation:
+  type: article
+  title: "GLOBESINK: A global climatology of sinking organic carbon flux and particle size from optical backscattering measurements"
+  authors:
+    - family-names: Briggs
+      given-names: Nathan
+      orcid: "https://orcid.org/0000-0003-1549-1386"
+    - family-names: Henson
+      given-names: Stephanie A.
+    - family-names: Flohr
+      given-names: Anita
+    - family-names: Hilder
+      given-names: Hans
+  journal: "Earth System Science Data Discussions"
+  year: 2026
+  doi: "10.5194/essd-2026-566"
+references:
+  - type: dataset
+    title: "GLOBESINK monthly POC flux and particle size climatology"
+    authors:
+      - family-names: Briggs
+        given-names: Nathan
+      - family-names: Henson
+        given-names: Stephanie A.
+      - family-names: Flohr
+        given-names: Anita
+      - family-names: Hilder
+        given-names: Hans
+    doi: "10.5281/zenodo.19558503"
+    repository: "https://zenodo.org"

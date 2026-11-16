@@ -1,0 +1,6 @@
+*.asv
+.DS_Store
+~$*
+
+# machine-specific paths (copy GLOBESINK_config_template.m to create)
+GLOBESINK_config/GLOBESINK_config.m
