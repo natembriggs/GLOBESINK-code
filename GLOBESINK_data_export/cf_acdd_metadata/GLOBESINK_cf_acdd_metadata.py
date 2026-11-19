@@ -1201,17 +1201,23 @@ def write_corrupt_bbx_csv(out_dir: Path, src_dir: Path, masks: dict[str, np.ndar
     print(f"\nlisted {len(rows)} masked cells in {CORRUPT_BBX_CSV}")
 
 
-def write_variable_summary(nc_path: Path, out_path: Path) -> None:
-    """The variable summary spreadsheet shipped with each release, read from the final file."""
+def write_variable_summary(raw_path: Path, interp_path: Path, out_path: Path) -> None:
+    """The human-readable variable summary spreadsheet shipped with each release, read from the final files.
+
+    One row a variable, in the raw file's order, then the variables only in the smoothed, interpolated
+    file (e.g. `cell_status`); the last column says which file(s) hold it."""
     import pandas as pd
 
-    rows = []
-    with nc.Dataset(nc_path) as d:
-        for name, var in d.variables.items():
-            scalar = var.ndim == 0
-            units = getattr(var, "units", "")
-            rows.append(
-                {
+    rows: dict[str, dict] = {}
+    for path, which in ((raw_path, "raw"), (interp_path, "smoothed, interpolated")):
+        with nc.Dataset(path) as d:
+            for name, var in d.variables.items():
+                if name in rows:
+                    rows[name]["File"] = "both"
+                    continue
+                scalar = var.ndim == 0
+                units = getattr(var, "units", "")
+                rows[name] = {
                     "GLOBESINK Netcdf Variable Name": name,
                     "Value (if variable is scalar)": float(var[...]) if scalar else None,
                     "Units (blank if unitless)": "" if units == "1" else units,
@@ -1221,9 +1227,9 @@ def write_variable_summary(nc_path: Path, out_path: Path) -> None:
                     "Variable Size": "1" if scalar else "x".join(str(n) for n in reversed(var.shape)),
                     "Variable Description": getattr(var, "long_name", ""),
                     "Comment": getattr(var, "comment", ""),
+                    "File": f"{which} only",
                 }
-            )
-    pd.DataFrame(rows).to_excel(out_path, index=False)
+    pd.DataFrame(list(rows.values())).to_excel(out_path, index=False)
     print(f"wrote {out_path.name} ({len(rows)} variables)")
 
 
@@ -1419,7 +1425,7 @@ def main(argv: list[str] | None = None) -> int:
             )
         if masks:
             write_corrupt_bbx_csv(args.out, args.src, masks)
-        write_variable_summary(args.out / RAW_FILE, args.out / VARIABLE_SUMMARY_XLSX)
+        write_variable_summary(args.out / RAW_FILE, args.out / INTERP_FILE, args.out / VARIABLE_SUMMARY_XLSX)
     ok = all(
         [
             verify(
